@@ -1,15 +1,17 @@
-package computergraphics;
+package drawingalgorithms;
 
-import computergraphics.model.Fractal;
-import computergraphics.service.Drawer;
+import drawingalgorithms.model.Algorithm;
+import drawingalgorithms.service.Drawer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-public class FractalArt extends Application {
-    private static final String FRACTAL_ART = "Fractal art";
+import java.util.Random;
+
+public class DrawingAlgorithms extends Application {
+    private static final String DrawingAlgorithms = "Drawing algorithms";
 
     @Override
     public void start(Stage primaryStage) {
@@ -20,10 +22,12 @@ public class FractalArt extends Application {
         root.getChildren().add(canvas);
 
         Drawer drawer = new Drawer(canvas);
-        drawer.draw(Fractal.TREE);
+        Algorithm[] algorithms = Algorithm.values();
+        int index = new Random().nextInt(algorithms.length);
+        drawer.draw(algorithms[index]);
 
         primaryStage.setScene(new Scene(root));
-        primaryStage.setTitle(FRACTAL_ART);
+        primaryStage.setTitle(DrawingAlgorithms);
         primaryStage.setResizable(false);
         primaryStage.show();
     }

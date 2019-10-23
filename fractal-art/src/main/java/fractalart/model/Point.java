@@ -1,4 +1,4 @@
-package computergraphics.model;
+package fractalart.model;
 
 public class Point {
     private double x;

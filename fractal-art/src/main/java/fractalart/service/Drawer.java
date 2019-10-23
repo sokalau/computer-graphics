@@ -1,7 +1,7 @@
-package computergraphics.service;
+package fractalart.service;
 
-import computergraphics.model.Fractal;
-import computergraphics.model.Point;
+import fractalart.model.Fractal;
+import fractalart.model.Point;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.paint.Color;
 
@@ -15,6 +15,7 @@ public class Drawer {
     private static final double MIN_LENGTH_CANTOR_SET = 1;
     private static final double DEPTH_TO_RETURN_FRACTAL_TREE = 0;
     private static final int FRACTAL_TREE_BOUND = 106;
+    private static final int CANTOR_SET_Y_STEP = 20;
 
     private Canvas canvas;
 
@@ -25,35 +26,37 @@ public class Drawer {
     public void draw(Fractal fractal) {
         switch (fractal) {
             case CANTOR_SET:
-                double width = getCanvasCenter().getX() / 1.5;
-                double height = getCanvasCenter().getY();
-                drawCantorSet(width, height, CANTOR_SET_LENGTH);
+                drawCantorSet();
                 break;
             case TREE:
-                double x = canvas.getWidth() / 2;
-                double y = canvas.getHeight();
-                drawFractalTree(x, y, TREE_ANGLE, TREE_DEPTH);
+                drawFractalTree();
                 break;
-            default:
-                throw new IllegalArgumentException("There is no such fractal type.");
         }
+    }
+
+    private void drawCantorSet() {
+        drawCantorSet(getCanvasCenter().getX() / 1.5, getCanvasCenter().getY(), CANTOR_SET_LENGTH);
     }
 
     private void drawCantorSet(double x, double y, double length) {
         if (length > MIN_LENGTH_CANTOR_SET) {
             canvas.getGraphicsContext2D().strokeLine(x, y, x + length, y);
-            y += 20;
+            y += CANTOR_SET_Y_STEP;
             drawCantorSet(x, y, length / 3);
             drawCantorSet(x + length * 2 / 3, y, length / 3);
         }
+    }
+
+    private void drawFractalTree() {
+        drawFractalTree(canvas.getWidth() / 2, canvas.getHeight(), TREE_ANGLE, TREE_DEPTH);
     }
 
     private void drawFractalTree(double x, double y, double angle, double depth) {
         if (depth == DEPTH_TO_RETURN_FRACTAL_TREE) return;
 
         if (depth < 9) {
-            Random random = new Random();
-            Color color = Color.rgb(0, random.nextInt(FRACTAL_TREE_BOUND) + (250 - FRACTAL_TREE_BOUND), 0);
+            Color color = Color.rgb(
+                    0, new Random().nextInt(FRACTAL_TREE_BOUND) + (250 - FRACTAL_TREE_BOUND), 0);
             canvas.getGraphicsContext2D().setStroke(color);
         } else {
             canvas.getGraphicsContext2D().setStroke(Color.BROWN);
